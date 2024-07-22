@@ -36,6 +36,10 @@ FROM ${BASE_IMAGE}
 ARG MESHTASTIC_MATRIX_RELAY_SOURCE_DIR
 ARG MESHTASTIC_MATRIX_RELAY_VERSION
 ARG MESHTASTIC_MATRIX_RELAY_COMMIT_HASH
+RUN set -ux \
+    && apt-get update \
+    && apt-get install --no-install-recommends --yes libjpeg62-turbo \
+    && rm -r /var/lib/apt/lists/*
 COPY --from=build ${MESHTASTIC_MATRIX_RELAY_SOURCE_DIR} \
     ${MESHTASTIC_MATRIX_RELAY_SOURCE_DIR}
 # optional for finding source code faster when inspecting image
