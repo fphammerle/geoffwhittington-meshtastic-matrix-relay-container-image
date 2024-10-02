@@ -2,6 +2,7 @@
 # to reduce number of source builds of python packages for arm32
 ARG BASE_IMAGE=docker.io/python:3.12.4-slim-bookworm
 ARG MESHTASTIC_MATRIX_RELAY_SOURCE_DIR=/opt/meshtastic-matrix-relay
+ARG MESHTASTIC_MATRIX_RELAY_REPO=https://github.com/geoffwhittington/meshtastic-matrix-relay/
 ARG MESHTASTIC_MATRIX_RELAY_VERSION=0.7.0
 ARG MESHTASTIC_MATRIX_RELAY_COMMIT_HASH=61698fbaabd6e0bd45e827064ce5025ec7f3f5e9
 
@@ -21,11 +22,12 @@ RUN set -ux \
     && chown $UID ${MESHTASTIC_MATRIX_RELAY_SOURCE_DIR}
 USER $UID:1000
 WORKDIR ${MESHTASTIC_MATRIX_RELAY_SOURCE_DIR}
+ARG MESHTASTIC_MATRIX_RELAY_REPO
 ARG MESHTASTIC_MATRIX_RELAY_VERSION
 ARG MESHTASTIC_MATRIX_RELAY_COMMIT_HASH
 RUN set -ux \
     && git clone --branch ${MESHTASTIC_MATRIX_RELAY_VERSION} \
-        https://github.com/geoffwhittington/meshtastic-matrix-relay/ . \
+        ${MESHTASTIC_MATRIX_RELAY_REPO} . \
     && [ "$(git rev-parse HEAD)" \
          = "${MESHTASTIC_MATRIX_RELAY_COMMIT_HASH}" ] \
     && rm -r .git .github .gitignore \
